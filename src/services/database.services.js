@@ -43,30 +43,36 @@ var uri = "mongodb+srv://".concat(process.env.DB_USERNAME, ":").concat(process.e
 var DatabaseService = /** @class */ (function () {
     function DatabaseService() {
         this.client = new mongodb_1.MongoClient(uri);
+        this.db = this.client.db(process.env.DB_NAME);
     }
     DatabaseService.prototype.connect = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, , 3, 5]);
-                        return [4 /*yield*/, this.client.connect()];
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.db.command({ ping: 1 })];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.client.db('admin').command({ ping: 1 })];
-                    case 2:
-                        _a.sent();
                         console.log('Pinged your deployment. You successfully connected to MongoDB!');
-                        return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, this.client.close()];
-                    case 4:
-                        _a.sent();
-                        return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        console.log('error', error_1);
+                        throw error_1;
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
+    Object.defineProperty(DatabaseService.prototype, "users", {
+        get: function () {
+            return this.db.collection(process.env.DB_USERS_COLLECTION);
+        },
+        enumerable: false,
+        configurable: true
+    });
     return DatabaseService;
 }());
 var databaseService = new DatabaseService();
