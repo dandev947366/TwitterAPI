@@ -1,25 +1,19 @@
 import {Router} from 'express'
-import {loginValidator} from '../middlewares/users.middlewares'
-import {loginController, registerController} from '../controllers/users.controllers'
-import databaseService from '../services/database.services'
-import User from '../models/schemas/User.schema'
+import {loginValidator, registerValidator} from '../middlewares/users.middlewares'
+import { loginController, registerController } from '../controllers/users.controllers';
+
 const usersRouter = Router()
 
+usersRouter.post('/login', loginValidator, loginController)
 
-usersRouter.post('/login', loginValidator, loginController, (req, res) =>{
+/** Description: Register a new user
+* Path: /register
+* Method: POST
+* Body: { name: string, email: string, password: string, confirm_password: string, date_of_birth: ISO8601 }
+*/
 
-    res.json({
-        message: "Login success"
-    });
-})
-usersRouter.post('/register', registerController, (req, res) =>{
-    const { email, password } = req.body
-   
-    databaseService.users.insertOne(new User({email, password}))
-    res.json({
-        message: "Register success"
-    });
+usersRouter.post('/register', registerValidator , registerController)
 
 
-})
+
 export default usersRouter
