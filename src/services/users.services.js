@@ -36,43 +36,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.registerController = exports.loginController = void 0;
-var database_services_1 = require("../services/database.services");
+var database_services_1 = require("./database.services");
 var User_schema_1 = require("../models/schemas/User.schema");
-var loginController = function (req, res) {
-    var _a = req.body, email = _a.email, password = _a.password;
-    if (email == 'dan123@gmail.com' && password == '123456') {
-        return res.status(200).json({
-            message: "Login success"
-        });
+var UsersService = /** @class */ (function () {
+    function UsersService() {
     }
-    return res.status(400).json({
-        error: "Login failed"
-    });
-};
-exports.loginController = loginController;
-var registerController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, email, password, result, error_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _a = req.body, email = _a.email, password = _a.password;
-                _b.label = 1;
-            case 1:
-                _b.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, database_services_1["default"].users.insertOne(new User_schema_1["default"]({ email: email, password: password }))];
-            case 2:
-                result = _b.sent();
-                return [2 /*return*/, res.json({
-                        error: "Register success"
-                    })];
-            case 3:
-                error_1 = _b.sent();
-                return [2 /*return*/, res.status(400).json({
-                        error: "Register failed"
-                    })];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); };
-exports.registerController = registerController;
+    UsersService.prototype.register = function (payload) {
+        return __awaiter(this, void 0, void 0, function () {
+            var email, password, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        email = payload.email, password = payload.password;
+                        return [4 /*yield*/, database_services_1["default"].users.insertOne(new User_schema_1["default"]({ email: email, password: password }))];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    };
+    UsersService.prototype.checkEmailExist = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, database_services_1["default"].users.findOne({ email: email })];
+                    case 1:
+                        user = _a.sent();
+                        return [2 /*return*/, Boolean(user)];
+                }
+            });
+        });
+    };
+    return UsersService;
+}());
+var usersService = new UsersService();
+exports["default"] = usersService;
