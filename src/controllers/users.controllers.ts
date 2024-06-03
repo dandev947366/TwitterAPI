@@ -25,7 +25,7 @@ export const registerController = async (req: Request<paramsDictionary, any, Reg
     try {
         const result = await databaseService.users.insertOne(new User({email, password})) 
         return res.json({
-        error: "Register success"
+        message: "Register success"
     })
     } catch (error) {
         return res.status(400).json({
