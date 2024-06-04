@@ -19,9 +19,11 @@ export const loginController = (req: Request, res: Response) => {
 }
 
 //REGISTER CONTROLLER
+//FIXME - ERROR 
 export const registerController = async (req: Request<paramsDictionary, any, RegisterReqBody>, res: Response) => {
 
     const {email, password} = req.body
+    console.log(email, password)
     try {
         const result = await databaseService.users.insertOne(new User({email, password})) 
         return res.json({

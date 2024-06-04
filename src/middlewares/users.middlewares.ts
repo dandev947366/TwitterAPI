@@ -3,7 +3,7 @@ import { checkSchema } from 'express-validator';
 import { validate } from '../utils/validation';
 import usersService from '../services/users.services';
 
-// LOGIN VALIDATOR
+//ANCHOR -  LOGIN VALIDATOR
 export const loginValidator = (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -15,7 +15,7 @@ export const loginValidator = (req: Request, res: Response, next: NextFunction) 
     next();
 };
 
-// REGISTER VALIDATOR
+//ANCHOR -  REGISTER VALIDATOR
 export const registerValidator = validate(
     checkSchema({
         username: {

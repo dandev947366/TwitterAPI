@@ -5,6 +5,8 @@ export enum UserVerifyStatus {
     Banned
   }
   
+  
+//NOTE - CHANGE ORDER, CHANGE LOGIC
 export enum TokenType{
   AccessToken,
   RefreshToken,
