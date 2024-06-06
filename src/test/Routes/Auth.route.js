@@ -1,35 +1,24 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
+// REGISTER
+router.post('/register', async (req, res, next) => {
+    res.send('register router');
+});
 
-//ANCHOR - REGISTER
-router.post('/register', async(req, res, next)=>{
-    res.send('register router')
+// LOGIN
+router.post('/login', async (req, res, next) => {
+    res.send('login router');
+});
 
-})
+// REFRESH TOKEN
+router.post('/refresh-token', async (req, res, next) => {
+    res.send('refresh-token router');
+});
 
-//ANCHOR - LOGIN
-router.post('/login', async(req, res, next)=>{
-    res.send('login router')
+// LOGOUT
+router.post('/logout', async (req, res, next) => {
+    res.send('logout router');
+});
 
-})
-
-
-//ANCHOR - REFRESH TOKEN
-router.post('/refresh-token', async(req, res, next)=>{
-    res.send('refresh-token router')
-
-})
-
-
-//ANCHOR - LOGOUT
-router.post('/logout', async(req, res, next)=>{
-    res.send('logout router')
-
-})
-
-
-
-
-
-module.export = router
+module.exports = router;
