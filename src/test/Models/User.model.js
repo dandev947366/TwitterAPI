@@ -1,11 +1,19 @@
 const mongoose = require('mongoose');
-const { type } = require('os');
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
+
 main().catch(err => console.log(err));
 
-const UserSchema = new Schema({
+async function main() {
+    // Replace with your MongoDB connection string
+    await mongoose.connect('mongodb://localhost:27017/yourdbname', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    });
+}
 
-    emai:{
+const UserSchema = new Schema({
+    email: {
         type: String,
         required: true,
         lowercase: true,
@@ -15,6 +23,7 @@ const UserSchema = new Schema({
         type: String,
         required: true
     }
-})
+});
 
-const User = mongoose.model('user', UserSchema)
+const User = mongoose.model('User', UserSchema);
+module.exports = User;
