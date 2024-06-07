@@ -4,7 +4,7 @@ const createError = require('http-errors');
 const User = require('../Models/User.model');
 const bcrypt = require('bcrypt'); // For password hashing
 const {authSchema} = require('../helpers/validation_schema')
-
+const {signAccessToken} = require('../helpers/jwt_helper')
 
 
 
@@ -19,6 +19,7 @@ router.post('/register', async (req, res, next) => {
         if (!email || !password) {
             throw createError.BadRequest('Email and password are required');
         }
+        
 
         const doesExist = await User.findOne({ email: result.email });
         if (doesExist) {
@@ -28,7 +29,10 @@ router.post('/register', async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
         const user = new User(result);
         const savedUser = await user.save();
-        res.status(201).send(savedUser);
+        
+        //ACCESS TOKEN
+        const accessToken = await signAccessToken(savedUser.id)
+        res.status(201).send(accessToken);
     } catch (error) {
     if(error.isJoi){error.status=422}
         next(error);
