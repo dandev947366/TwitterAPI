@@ -11,6 +11,9 @@ mongoose.connect('mongodb://localhost:27017', {
     console.log('mongodb connected')
 }).catch((err)=>console.log(err.message))
 
+
+
+
 mongoose.connection.on('connected', ()=>{
 
     console.log('Mongoose connected to db')
