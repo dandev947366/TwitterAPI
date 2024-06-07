@@ -39,6 +39,7 @@ UserSchema.pre('save', async function (next) {
     }
 });
 
+
 // Post-save hook
 UserSchema.post('save', function (doc, next) {
     console.log('User saved:', doc.email);

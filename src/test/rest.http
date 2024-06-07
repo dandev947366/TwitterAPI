@@ -3,6 +3,15 @@ GET http://localhost:3000
 ###
 
 POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email":"123test@gmail.com",
+    "password":"123test"
+}
+
+
+
 
 ###
 
@@ -10,8 +19,8 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email":"fb21@gmail.com",
-    "password":"12"
+    "email":"123test@gmail.com",
+    "password":"123test"
 }
 
 

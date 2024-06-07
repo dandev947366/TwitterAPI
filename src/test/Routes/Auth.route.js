@@ -8,7 +8,7 @@ const {signAccessToken} = require('../helpers/jwt_helper')
 
 
 
-// REGISTER
+//ANCHOR -  REGISTER
 router.post('/register', async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -39,17 +39,53 @@ router.post('/register', async (req, res, next) => {
     }
 });
 
-// LOGIN
+//ANCHOR -  LOGIN
 router.post('/login', async (req, res, next) => {
-    res.send('login router');
+    try {
+        const { email, password } = req.body;
+
+        // Validate request body
+        const result = await authSchema.validateAsync(req.body);
+
+        // Check if email and password are provided
+        if (!email || !password) {
+            throw createError.BadRequest('Email and password are required');
+        }
+
+        // Check if the user exists
+        const user = await User.findOne({ email });
+        if (!user) {
+            throw createError.NotFound('User not found');
+        }
+
+        // Compare the provided password with the hashed password in the database
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            throw createError.Unauthorized('Invalid email or password');
+        }
+
+        // If authentication is successful, generate an access token
+        const accessToken = await signAccessToken(user.id);
+
+        // Send the access token as a response
+        res.status(200).send({accessToken });
+
+    } catch (error) {
+        // Handle errors
+        if (error.isJoi) {
+            error.status = 422; // Set status to 422 for validation errors
+        }
+        next(error); // Pass the error to the error handling middleware
+    }
 });
 
-// REFRESH TOKEN
+
+//ANCHOR -  REFRESH TOKEN
 router.post('/refresh-token', async (req, res, next) => {
     res.send('refresh-token router');
 });
 
-// LOGOUT
+//ANCHOR -  LOGOUT
 router.post('/logout', async (req, res, next) => {
     res.send('logout router');
 });
