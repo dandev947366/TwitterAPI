@@ -4,7 +4,7 @@ const createError = require('http-errors');
 const User = require('../Models/User.model');
 const bcrypt = require('bcrypt'); // For password hashing
 const {authSchema} = require('../helpers/validation_schema')
-const {signAccessToken} = require('../helpers/jwt_helper')
+const {signAccessToken, signRefreshToken, verifyRefreshToken} = require('../helpers/jwt_helper')
 
 
 
@@ -30,9 +30,11 @@ router.post('/register', async (req, res, next) => {
         const user = new User(result);
         const savedUser = await user.save();
         
-        //ACCESS TOKEN
+        //ACCESS & REFRESH TOKEN
         const accessToken = await signAccessToken(savedUser.id)
-        res.status(201).send(accessToken);
+        const refreshToken = await signRefreshToken(savedUser.id)
+        
+        res.status(201).send(accessToken, refreshToken);
     } catch (error) {
     if(error.isJoi){error.status=422}
         next(error);
@@ -66,9 +68,12 @@ router.post('/login', async (req, res, next) => {
 
         // If authentication is successful, generate an access token
         const accessToken = await signAccessToken(user.id);
-
+        const refreshToken = await signRefreshToken(user.id)
         // Send the access token as a response
-        res.status(200).send({accessToken });
+        res.status(200).send({
+            accessToken,
+            refreshToken
+        });
 
     } catch (error) {
         // Handle errors
@@ -82,8 +87,26 @@ router.post('/login', async (req, res, next) => {
 
 //ANCHOR -  REFRESH TOKEN
 router.post('/refresh-token', async (req, res, next) => {
-    res.send('refresh-token router');
-});
+    try {
+       const { refreshToken } = req.body;
+       if (!refreshToken) {
+          throw createError.BadRequest();
+       }
+       
+       const userId = await verifyRefreshToken(refreshToken);
+     
+       const accessToken = await signAccessToken(userId);
+       const newRefreshToken = await signRefreshToken(userId);
+       
+       res.send({
+        accessToken: accessToken,
+        refreshToken: newRefreshToken
+       });
+    } catch (error) {
+       next(error);
+    }
+ });
+ 
 
 //ANCHOR -  LOGOUT
 router.post('/logout', async (req, res, next) => {

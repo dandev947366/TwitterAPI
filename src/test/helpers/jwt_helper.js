@@ -1,7 +1,6 @@
 const JWT = require('jsonwebtoken');
 const createError = require('http-errors');
 const secret = 'default_secret_key'
-const expiresIn = '15s'
 const refresh_secret='test_refresh_key'
 const issuer = 'testdomain.com'
 module.exports = {
@@ -14,8 +13,8 @@ module.exports = {
             };
             
             const options = {
-                expiresIn, 
-                issuer: 'testdomain.com', 
+                expiresIn: '15s', 
+                issuer, 
                 audience: userId 
             }
             JWT.sign(payload, secret, options, (err, token) => {
@@ -57,9 +56,12 @@ module.exports = {
     //ANCHOR - SIGN REFRESH TOKEN
     signRefreshToken: (userId) => {
         return new Promise((resolve, reject) => {
-            const payload = {}
+            const payload = {
+                userId
+            }
             const options = {
-                expiresIn: '1y',
+            
+                expiresIn: '1m',
                 issuer,
                 audience: userId,
             }
@@ -74,5 +76,20 @@ module.exports = {
         
         })
     
+    },
+    
+    //ANCHOR - VERIFY REFRESH TOKEN
+    verifyRefreshToken: (refreshToken) => {
+        return new Promise((resolve, reject) => {
+            JWT.verify(refreshToken, refresh_secret, (err, payload) => {
+                if (err) {
+                    return reject(createError.Unauthorized());
+                }
+                const userId = payload.aud;
+                console.log(userId)
+                resolve(userId);
+            });
+        });
     }
+    
 };

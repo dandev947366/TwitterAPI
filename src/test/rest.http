@@ -1,5 +1,5 @@
 GET http://localhost:3000
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdG5hbWUiLCJpYXQiOjE3MTc3Njc5OTcsImV4cCI6MTcxNzc2ODAxMiwiYXVkIjoiNjY2MmI4ODVhYjQwYjE4Zjk1YjVjMTQzIiwiaXNzIjoidGVzdGRvbWFpbi5jb20ifQ.JCVMTl93m2AE2c8vSRZlKutq-BuGfBF22JzkGSVoWcQd
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoidGVzdG5hbWUiLCJpYXQiOjE3MTc3NzQ4NTksImV4cCI6MTcxNzc3NDg3NCwiYXVkIjoiNjY2MzIxZjc3MDllOWNkY2ExNjZhMjMxIiwiaXNzIjoidGVzdGRvbWFpbi5jb20ifQ.Gebip2r8256D_1JkNaeJGDbyp6zSFCAUMm_iGTkykEQ
 
 ###
 
@@ -7,7 +7,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email":"123test@gmail.com",
+    "email":"12314test@gmail.com",
     "password":"123test"
 }
 
@@ -20,7 +20,7 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email":"123test@gmail.com",
+    "email":"test213test@gmail.com",
     "password":"123test"
 }
 
@@ -29,6 +29,15 @@ Content-Type: application/json
 ###
 
 POST http://localhost:3000/auth/refresh-token
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjYzMjFmNzcwOWU5Y2RjYTE2NmEyMzEiLCJpYXQiOjE3MTc3NzUyMzIsImV4cCI6MTcxNzc3NTI5MiwiYXVkIjoiNjY2MzIxZjc3MDllOWNkY2ExNjZhMjMxIiwiaXNzIjoidGVzdGRvbWFpbi5jb20ifQ.OG0jMDUlU6EYKBTSqAI-NtFbp-DmM6qF_xHraveLlh8"
+}
+
+
+
+
 
 ###
 
