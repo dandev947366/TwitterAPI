@@ -20,6 +20,6 @@
     "supertest": "^7.0.0"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon --inspect index.js"
   }
 }
