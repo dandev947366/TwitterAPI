@@ -1,95 +1,88 @@
 const JWT = require('jsonwebtoken');
 const createError = require('http-errors');
-const secret = 'default_secret_key'
-const refresh_secret='test_refresh_key'
-const issuer = 'testdomain.com'
-module.exports = {
 
-    //ANCHOR - SIGN ACCESS TOKEN
+const secret = 'default_secret_key';
+const issuer = 'testdomain.com';
+const audience = 'your_audience';
+
+module.exports = {
+    // Sign Access Token
     signAccessToken: (userId) => {
         return new Promise((resolve, reject) => {
             const payload = {
-                name: 'testname'
+                userId
             };
-            
             const options = {
-                expiresIn: '15s', 
-                issuer, 
-                audience: userId 
-            }
+                expiresIn: '1h', // Adjust as needed
+                issuer,
+                audience
+            };
             JWT.sign(payload, secret, options, (err, token) => {
                 if (err) {
-                
-                    return reject(createError(500, 'Internal Server Error'));
+                    console.error(err);
+                    reject(createError.InternalServerError());
+                } else {
+                    resolve(token);
                 }
-                resolve(token);
             });
         });
     },
-    
-    //ANCHOR - VERIFY ACCESS TOKEN
+
+    // Verify Access Token
     verifyAccessToken: (req, res, next) => {
-        if(!req.headers['authorization'])
-        {
-            return next(createError.Unauthorized())
+        if (!req.headers['authorization']) {
+            return next(createError.Unauthorized());
         }
-        const authHeader = req.headers['authorization']
-        const bearerToken = authHeader.split(' ')
-        const token = bearerToken[1]
+        const authHeader = req.headers['authorization'];
+        const bearerToken = authHeader.split(' ');
+        const token = bearerToken[1];
         JWT.verify(token, secret, (err, payload) => {
             if (err) {
-              if (err.name === 'JsonWebTokenError') {
-                return next(createError.Unauthorized('Invalid token'));
-              } else if (err.name === 'TokenExpiredError') {
-                return next(createError.Unauthorized('Token expired'));
-              } else {
-                return next(createError.Unauthorized(err.message));
-              }
-             
+                if (err.name === 'JsonWebTokenError') {
+                    return next(createError.Unauthorized('Invalid token'));
+                } else if (err.name === 'TokenExpiredError') {
+                    return next(createError.Unauthorized('Token expired'));
+                } else {
+                    return next(createError.Unauthorized('Token verification failed'));
+                }
             }
-            
-            req.payload = payload
-            next()
-        })
+            req.payload = payload;
+            next();
+        });
     },
-    
-    //ANCHOR - SIGN REFRESH TOKEN
+
+    // Sign Refresh Token
     signRefreshToken: (userId) => {
         return new Promise((resolve, reject) => {
             const payload = {
                 userId
-            }
+            };
             const options = {
-            
-                expiresIn: '1m',
+                expiresIn: '7d', // Adjust as needed
                 issuer,
-                audience: userId,
-            }
-            JWT.sign(payload, secret, options, (err, token)=>{
-                if(err) {
-                    console.log(err.message)
-                    reject(createError.InternalServerError())
+                audience
+            };
+            JWT.sign(payload, secret, options, (err, token) => {
+                if (err) {
+                    console.error(err);
+                    reject(createError.InternalServerError());
+                } else {
+                    resolve(token);
                 }
-                resolve(token)
-                
-            })
-        
-        })
-    
+            });
+        });
     },
-    
-    //ANCHOR - VERIFY REFRESH TOKEN
+
+    // Verify Refresh Token
     verifyRefreshToken: (refreshToken) => {
         return new Promise((resolve, reject) => {
-            JWT.verify(refreshToken, refresh_secret, (err, payload) => {
+            JWT.verify(refreshToken, secret, (err, payload) => {
                 if (err) {
-                    return reject(createError.Unauthorized());
+                    return reject(createError.Unauthorized('Invalid refresh token'));
                 }
-                const userId = payload.aud;
-                console.log(userId)
+                const userId = payload.userId;
                 resolve(userId);
             });
         });
     }
-    
 };
