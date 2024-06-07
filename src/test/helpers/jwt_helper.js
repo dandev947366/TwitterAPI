@@ -1,15 +1,16 @@
 const JWT = require('jsonwebtoken');
 const createError = require('http-errors');
-
+const secret = 'default_secret_key'
+const expiresIn = '15s'
 module.exports = {
     signAccessToken: (userId) => {
         return new Promise((resolve, reject) => {
             const payload = {
                 name: 'testname'
             };
-            const secret = 'default_secret_key'
+            
             const options = {
-                expiresIn: '1h', 
+                expiresIn, 
                 issuer: 'testdomain.com', 
                 audience: userId 
             }
@@ -21,5 +22,19 @@ module.exports = {
                 resolve(token);
             });
         });
+    },
+    verifyAccessToken: (req, res, next) => {
+        if(!req.headers['authorization'])
+        {
+            return next(createError.Unauthorized())
+        }
+        const authHeader = req.headers['authorization']
+        const bearerToken = authHeader.split(' ')
+        const token = bearerToken[1]
+        JWT.verify(token, secret, (err, payload)=>{
+            if(err) {return next(createError.Unauthorized())}
+            req.payload = payload
+            next()
+        })
     }
 };
