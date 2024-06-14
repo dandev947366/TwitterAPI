@@ -20,7 +20,7 @@ export const loginController = (req: Request, res: Response) => {
 
 //REGISTER CONTROLLER
 //FIXME - ERROR 
-export const registerController = async (req: Request<paramsDictionary, any, RegisterReqBody>, res: Response) => {
+export const registerController = async (req: Request<paramsDictionary, any, RegisterReqBody>, res: Response, next: NextFunction) => {
 
     const {email, password} = req.body
     console.log(email, password)
@@ -30,9 +30,10 @@ export const registerController = async (req: Request<paramsDictionary, any, Reg
         message: "Register success"
     })
     } catch (error) {
-        return res.status(400).json({
-            error: "Register failed"
-        })
+        // return res.status(400).json({
+        //     error: "Register failed"
+        // })
+        next(error)
     }
     
   
