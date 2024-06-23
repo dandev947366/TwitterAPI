@@ -4,16 +4,27 @@ import { validate } from '../utils/validation';
 import usersService from '../services/users.services';
 
 //ANCHOR -  LOGIN VALIDATOR
-export const loginValidator = (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).json({
-            error: 'Missing email or password',
-        });
-    }
-
-    next();
-};
+export const loginValidator = validate(checkSchema({
+    email: {
+        in: ['body'],
+        isEmail: {
+            errorMessage: 'Enter a valid email address',
+        },
+        notEmpty: {
+            errorMessage: 'Email is required',
+        },
+    },
+    password: {
+        in: ['body'],
+        isLength: {
+            errorMessage: 'Password must be at least 6 characters long',
+            options: { min: 6 },
+        },
+        notEmpty: {
+            errorMessage: 'Password is required',
+        },
+    },
+},['body']));
 
 //ANCHOR -  REGISTER VALIDATOR
 export const registerValidator = validate(
@@ -101,5 +112,23 @@ export const registerValidator = validate(
                 errorMessage: 'Date of birth must be a valid ISO 8601 date',
             },
         },
-    })
+    }, ['body'])
 );
+
+//ANCHOR -  ACCESS TOKEN VALIDATOR
+export const accessTokenValidator = validate(
+    checkSchema({
+        Authorization:{ 
+            // notEmpty:{
+            //     errorMessage: USERS_MESSAGES.ACCESS_TOKEN_IS_REQUIRED
+            // }
+            custom:{
+                options: async(value, {req})=>{
+                    const access_token = value.replace('Bearer ', '')
+                    
+                
+                }
+            }
+        }
+    }, ['headers'])
+)

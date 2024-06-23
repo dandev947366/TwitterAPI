@@ -4,16 +4,23 @@ import { loginController, registerController } from '../controllers/users.contro
 
 const usersRouter = Router()
 
-usersRouter.post('/login', loginValidator, loginController)
+usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 
-usersRouter.post(
-  '/register',
-  registerValidator,
-  registerController,
-  (err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.log('Err: ', err.message)
-    res.status(400).json({ error: err.message })
-  }
-)
+usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
+
+usersRouter.post('/logout', registerValidator, wrapRequestHandler(registerController))
+
+
+
+
+// usersRouter.post(
+//   '/register',
+//   registerValidator,
+//   registerController,
+//   (err: Error, req: Request, res: Response, next: NextFunction) => {
+//     console.log('Err: ', err.message)
+//     res.status(400).json({ error: err.message })
+//   }
+// )
 
 export default usersRouter
