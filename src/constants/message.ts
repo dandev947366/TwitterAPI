@@ -16,5 +16,6 @@ export const USERS_MESSAGES = {
     CONFIRM_PASSWORD_MUST_BE_STRONG: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',
     CONFIRM_PASSWORD_MUST_BE_A_STRING: 'Password must be a string',
     DATE_OF_BIRTH_ISO8601: 'Date of birth must be in ISO 8601 format (YYYY-MM-DD)',
+    ACCESS_TOKEN_IS_REQUIRED: 'Access token is required'
     
 };
