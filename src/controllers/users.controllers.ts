@@ -21,7 +21,6 @@ export const loginController = (req: Request, res: Response) => {
 }
 
 //REGISTER CONTROLLER
-//FIXME - ERROR 
 export const registerController = async (
     req: Request<ParamsDictionary, any, RegisterReqBody>,
     res: Response,
