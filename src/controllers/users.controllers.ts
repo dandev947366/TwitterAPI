@@ -21,13 +21,13 @@ export const loginController = (req: Request, res: Response) => {
 }
 
 //REGISTER CONTROLLER
+//FIXME - Error: Cannot set headers after they are sent to the client
 export const registerController = async (
-    req: Request<ParamsDictionary, any, RegisterReqBody>,
+    req: Request,
     res: Response,
     next: NextFunction
 ) => {
     const { email, password } = req.body;
-    console.log(email, password);
 
     try {
         const user = new User({ email, password });
@@ -37,9 +37,10 @@ export const registerController = async (
             message: "Register success",
             userId: result.insertedId,
         });
+        next()
     } catch (error) {
+        console.log(error);
         next(error);
+        return;
     }
 };
-
-
