@@ -4,23 +4,18 @@ import { loginController, registerController } from '../controllers/users.contro
 
 const usersRouter = Router()
 
-usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+usersRouter.post('/login', loginValidator,loginController)
 
-usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
+usersRouter.post('/register', registerValidator, registerController)
+usersRouter.post('/logout', (req: Request, res: Response) => {
+    
+    res.status(200).json({ message: 'Logout success' });
+});
 
-usersRouter.post('/logout', registerValidator, wrapRequestHandler(registerController))
-
-
-
-
-// usersRouter.post(
-//   '/register',
-//   registerValidator,
-//   registerController,
-//   (err: Error, req: Request, res: Response, next: NextFunction) => {
-//     console.log('Err: ', err.message)
-//     res.status(400).json({ error: err.message })
-//   }
-// )
+// Error-handling middleware
+usersRouter.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error('Error: ', err.message);
+    res.status(400).json({ error: err.message });
+});
 
 export default usersRouter

@@ -47,15 +47,15 @@ export const registerValidator = validate(checkSchema({
             errorMessage: USERS_MESSAGES.EMAIL_IS_REQUIRED,
         },
         trim: true,
-        custom: {
-            options: async (value: string) => {
-                const isExistEmail = await usersService.checkEmailExist(value);
-                if (isExistEmail) {
-                    throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS);
-                }
-                return true;
-            },
-        },
+        // custom: {
+        //     options: async (value: string) => {
+        //         const isExistEmail = await usersService.checkEmailExist(value);
+        //         if (isExistEmail) {
+        //             throw new Error(USERS_MESSAGES.EMAIL_ALREADY_EXISTS);
+        //         }
+        //         return true;
+        //     },
+        // },
     },
     password: {
         isLength: {
@@ -68,14 +68,14 @@ export const registerValidator = validate(checkSchema({
         isString: {
             errorMessage: USERS_MESSAGES.PASSWORD_MUST_BE_A_STRING,
         },
-        custom: {
-            options: (value: string, { req }) => {
-                if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}/.test(value)) {
-                    throw new Error(USERS_MESSAGES.PASSWORD_MUST_BE_STRONG);
-                }
-                return true;
-            },
-        },
+        // custom: {
+        //     options: (value: string, { req }) => {
+        //         if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}/.test(value)) {
+        //             throw new Error(USERS_MESSAGES.PASSWORD_MUST_BE_STRONG);
+        //         }
+        //         return true;
+        //     },
+        // },
     },
     confirm_password: {
         isLength: {
@@ -88,14 +88,14 @@ export const registerValidator = validate(checkSchema({
         isString: {
             errorMessage: USERS_MESSAGES.CONFIRM_PASSWORD_MUST_BE_A_STRING,
         },
-        custom: {
-            options: (value: string, { req }) => {
-                if (value !== req.body.password) {
-                    throw new Error(USERS_MESSAGES.CONFIRM_PASSWORD_MATCH);
-                }
-                return true;
-            },
-        },
+        // custom: {
+        //     options: (value: string, { req }) => {
+        //         if (value !== req.body.password) {
+        //             throw new Error(USERS_MESSAGES.CONFIRM_PASSWORD_MATCH);
+        //         }
+        //         return true;
+        //     },
+        // },
     },
     date_of_birth: {
         isISO8601: {

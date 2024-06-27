@@ -34,32 +34,36 @@ class UsersService {
     })
   }
 
-  //ANCHOR - REGISTER SERVICE
-  async register(payload: RegisterReqBody) {
-    try {
-      const { email, password } = payload
-      const result = await databaseService.users.insertOne(
-        new User({
-          ...payload,
-          date_of_birth: new Date(payload.date_of_birth),
-          password: hashPassword(payload.password)
-        })
-      )
-      const user_id = result.insertedId.toString()
-      const [access_token, refresh_token] = await Promise.all([
-        this.signAccessToken(user_id),
-        this.signRefreshToken(user_id)
-      ])
-      return {
-        access_token,
-        refresh_token
-      }
-    } catch (error) {
-      console.error('Error during user registration:', error)
-      throw new Error('User registration failed')
-    }
-  }
+  // ANCHOR - REGISTER SERVICE
+async register(payload: RegisterReqBody) {
+  try {
+    // Insert the user into the database
+    const result = await databaseService.users.insertOne(
+      new User({
+        ...payload,
+        date_of_birth: new Date(payload.date_of_birth),
+        password: hashPassword(payload.password)
+      })
+    );
 
+    // Generate tokens if needed
+    // const user_id = result.insertedId.toString();
+    // const [access_token, refresh_token] = await Promise.all([
+    //   this.signAccessToken(user_id),
+    //   this.signRefreshToken(user_id)
+    // ]);
+
+    // Return the result or tokens if necessary
+    return result;
+    // {
+    //   access_token,
+    //   refresh_token
+    // };
+  } catch (error) {
+    console.error('Error during user registration:', error);
+    throw error; // Re-throw the error to propagate it to the controller
+  }
+}
   //ANCHOR - CHECK EMAIL EXIST
   async checkEmailExist(email: string) {
     const user = await databaseService.users.findOne({ email })

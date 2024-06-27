@@ -10,7 +10,7 @@ const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 class DatabaseService {
   private client: MongoClient
   private db: Db
-  constructor() {
+  constructor() { 
     this.client = new MongoClient(uri)
     this.db = this.client.db(process.env.DB_NAME)
 }
@@ -25,7 +25,7 @@ class DatabaseService {
       } catch (error){
         console.log('error', error)
         console.log('Cannot connect to MongoDB')
-        throw error
+       
       }
   
   }
